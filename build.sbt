@@ -20,7 +20,7 @@ libraryDependencies ++= Seq(
   "org.json4s" %% "json4s-jackson" % Json4sVersion,
   "org.json4s" %% "json4s-native" % Json4sVersion,
   "org.json4s" %% "json4s-ext" % Json4sVersion,
-  "org.dispatchhttp" %% "dispatch-core" % "0.14.0",
+  "org.scalaj" %% "scalaj-http" % "2.4.0",
 
   "org.scalatra" %% "scalatra-scalatest" % ScalatraVersion % "test",
   "javax.servlet" % "javax.servlet-api" % "3.1.0" % "provided",
