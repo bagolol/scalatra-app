@@ -2,7 +2,7 @@ package com.letshout.api
 
 import org.scalatra._
 
-class MyScalatraServlet extends ScalatraServlet {
+class Servlet extends ScalatraServlet {
 
   get("/") {
 

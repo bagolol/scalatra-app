@@ -2,9 +2,9 @@ package com.letshout.api
 
 import org.scalatra.test.scalatest._
 
-class MyScalatraServletTests extends ScalatraFunSuite {
+class ServletTests extends ScalatraFunSuite {
 
-  addServlet(classOf[MyScalatraServlet], "/*")
+  addServlet(classOf[Servlet], "/*")
 
   test("GET / on MyScalatraServlet should return status 200") {
     get("/") {
