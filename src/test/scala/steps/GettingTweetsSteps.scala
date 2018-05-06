@@ -13,9 +13,7 @@ class GettingTweetsSteps extends ScalaDsl with EN with Matchers with ApiSteps {
   }
 
   Given("""^a request for 2 tweets from user xyz arrives$"""){ () =>
-    get(ApiTestServer.letShoutHost / "tweets",
-      params = Map("username" -> Seq("xyz"),
-        "limit" -> Seq("2")))
+    get(ApiTestServer.letShoutHost / "tweets" / "xyz" / "2")
   }
   Then("""^I should receive a success response$"""){ () =>
     statusCode mustBe 200

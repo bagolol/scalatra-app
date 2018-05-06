@@ -36,11 +36,6 @@ trait ApiSteps extends ScalaDsl with EN {
     setResponse(req)
   }
 
-  def get(request: Req, params: Map[String, Seq[Any]]) = {
-    val req = Http.default(request.setHeader("Accept", "application/json").setMethod("GET").setQueryParameters(params))
-    setResponse(req)
-  }
-
   ApiTestServer
 }
 

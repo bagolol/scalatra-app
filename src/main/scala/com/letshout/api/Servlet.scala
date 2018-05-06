@@ -1,7 +1,8 @@
 package com.letshout.api
 
+import org.json4s.JsonAST.{JObject, JString}
 import org.scalatra._
-
+import scala.util.{Failure, Success}
 class Servlet extends ScalatraServlet {
 
   get("/") {
@@ -17,8 +18,15 @@ class Servlet extends ScalatraServlet {
   }
 
   get("/tweets/:user/:quantity") {
+    RequestParamsParser(params) match {
+      case Success(parsedParams) => {
 
+
+      }
+      case Failure(e) => BadRequest(buildErrorResponse(s"{$e.getMessage}"))
+
+    }
 
   }
-
+  private def buildErrorResponse(message: String) = JObject("error" -> JString(message))
 }
