@@ -7,7 +7,7 @@ import org.scalatest.Matchers
 import org.scalatest.MustMatchers._
 import util.LetShoutApiMockServer._
 
-class GettingTweetsSteps extends ScalaDsl with EN with Matchers with ApiSteps {
+class BasicApiInfoSteps extends ScalaDsl with EN with Matchers with ApiSteps {
   Before { _ =>
     mockServer.resetRequests()
   }
@@ -23,3 +23,4 @@ class GettingTweetsSteps extends ScalaDsl with EN with Matchers with ApiSteps {
   }
 
 }
+

@@ -5,8 +5,15 @@ import org.scalatra._
 class Servlet extends ScalatraServlet {
 
   get("/") {
+    contentType = "application/json"
 
-    NotFound("hello")
+    """{"application":"let-shout-api"}"""
+  }
+
+  get("/status") {
+    contentType = "application/json"
+
+    """{"status":"OK"}"""
   }
 
 }
