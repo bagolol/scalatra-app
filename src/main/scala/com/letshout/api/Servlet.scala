@@ -16,4 +16,9 @@ class Servlet extends ScalatraServlet {
     """{"status":"OK"}"""
   }
 
+  get("/tweets/:user/:quantity") {
+
+
+  }
+
 }

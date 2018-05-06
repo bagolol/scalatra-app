@@ -12,15 +12,17 @@ class BasicApiInfoSteps extends ScalaDsl with EN with Matchers with ApiSteps {
     mockServer.resetRequests()
   }
 
-  Given("""^a request for (\d+) tweets from user xyz arrives$"""){ (arg0:Int) =>
+  Given("""^I navigate to the home page$"""){ () =>
     get(ApiTestServer.letShoutHost)
   }
-  Then("""^I should receive a success response$"""){ () =>
-    statusCode mustBe 200
-  }
-  Then("""^the response contains the tweets in uppercase$"""){ () =>
+  Then("""^I am told the name of the application$"""){ () =>
     bodyAsJson mustBe JObject(List(("application",JString("let-shout-api"))))
   }
-
+  Given("""^I navigate to the status$"""){ () =>
+    get(ApiTestServer.letShoutHost / "status")
+  }
+  Then("""^I am shown the application status$"""){ () =>
+    bodyAsJson mustBe JObject(List(("status",JString("OK"))))
+  }
 }
 
