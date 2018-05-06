@@ -22,6 +22,8 @@ libraryDependencies ++= Seq(
   "org.json4s" %% "json4s-ext" % Json4sVersion,
   "org.dispatchhttp" %% "dispatch-core" % "0.14.0",
   "org.asynchttpclient" % "async-http-client" % "2.0.2",
+  "com.danielasfregola" %% "twitter4s" % "5.6-SNAPSHOT",
+
 
   "org.scalatra" %% "scalatra-scalatest" % ScalatraVersion % "test",
   "javax.servlet" % "javax.servlet-api" % "3.1.0" % "provided",
@@ -39,3 +41,5 @@ CucumberPlugin.monochrome := false
 enablePlugins(SbtTwirl)
 enablePlugins(ScalatraPlugin)
 enablePlugins(CucumberPlugin)
+
+resolvers += Resolver.sonatypeRepo("snapshots")

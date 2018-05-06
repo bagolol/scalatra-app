@@ -25,8 +25,7 @@ class TweetServiceSpec extends FlatSpec with MockitoSugar with BeforeAndAfter {
 
   "capitaliseTweets" should "invoke the twitter client" in {
     val expected = List(JObject())
-    val request = Map("username" -> "test", "limit" -> "2")
-    val result = TweetServiceTest.capitaliseTweets(request)
+    val result = TweetServiceTest.capitaliseTweets("username", "2")
 
     result mustBe expected
   }

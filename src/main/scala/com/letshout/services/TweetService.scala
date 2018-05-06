@@ -5,7 +5,7 @@ import org.json4s.jackson.Json
 
 trait TweetService {
 
-  def capitaliseTweets(params: Map[String, String]): List[JObject] = {
+  def capitaliseTweets(username:String, limit:String): List[JObject] = {
 
 
 
