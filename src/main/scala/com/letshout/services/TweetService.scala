@@ -21,9 +21,7 @@ trait TweetService {
   }
 
   private def capitaliseText(tweets: Seq[Tweet]): Seq[Tweet] = {
-    tweets.map { tweet =>
-      tweet.copy(text = tweet.text.toUpperCase)
-    }
+    tweets.map(tweet => tweet.copy(text = tweet.text.toUpperCase))
   }
 }
 

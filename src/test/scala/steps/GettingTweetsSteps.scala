@@ -5,7 +5,7 @@ import cucumber.api.scala.{EN, ScalaDsl}
 import org.json4s.JsonAST._
 import org.scalatest.Matchers
 import org.scalatest.MustMatchers._
-import util.LetShoutApiMockServer._
+import com.letshout.util.LetShoutApiMockServer._
 
 class GettingTweetsSteps extends ScalaDsl with EN with Matchers with ApiSteps {
   Before { _ =>

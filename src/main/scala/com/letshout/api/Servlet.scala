@@ -1,37 +1,49 @@
 package com.letshout.api
 
-import com.danielasfregola.twitter4s.entities.Tweet
+import akka.actor.ActorSystem
+import org.json4s.{DefaultFormats, Formats}
 import com.letshout.services.TweetService
 import org.json4s.JsonAST.{JObject, JString}
 import org.scalatra._
+import org.json4s.jackson.Serialization.write
+import org.json4s._
+import org.json4s.ext.JavaTypesSerializers
+import org.json4s.native.Serialization
 
-import scala.concurrent.Future
 import scala.util.{Failure, Success}
-class Servlet extends ScalatraServlet {
+import org.scalatra.json._
 
-  implicit val ec =  scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.ExecutionContext
+
+
+class Servlet(system: ActorSystem) extends ScalatraServlet with JacksonJsonSupport with FutureSupport {
+
+//  implicit val ec =  scala.concurrent.ExecutionContext.Implicits.global
+  protected implicit def executor: ExecutionContext = system.dispatcher
+//  protected implicit val jsonFormats: Formats = DefaultFormats
+  protected implicit lazy val jsonFormats: Formats = Serialization.formats(NoTypeHints) ++ JavaTypesSerializers.all
+
+  before() {
+    contentType = formats("json")
+  }
 
   get("/") {
-    contentType = "application/json"
 
     """{"application":"let-shout-api"}"""
   }
 
   get("/status") {
-    contentType = "application/json"
 
     """{"status":"OK"}"""
   }
 
   get("/tweets/:username/:limit") {
-    contentType = "application/json"
     RequestParamsParser(params) match {
       case Success(parsedParams) =>
         new AsyncResult {
           val is = TweetService.capitaliseTweets(parsedParams) map { tweets =>
-            println(tweets)
-            println("========================================")
-            Ok(tweets)
+            println("SUCCESS")
+            Ok(write(tweets))
           }
         }
       case Failure(e) => BadRequest(buildErrorResponse(s"{$e.getMessage}"))
@@ -40,3 +52,5 @@ class Servlet extends ScalatraServlet {
 
   private def buildErrorResponse(message: String) = JObject("error" -> JString(message))
 }
+case class Person(name: String,
+                  text: String)

@@ -1,4 +1,4 @@
-package util
+package com.letshout.util
 
 import com.github.tomakehurst.wiremock.WireMockServer
 
