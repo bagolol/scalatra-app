@@ -8,17 +8,19 @@ import com.letshout.dao.TwitterClient
 import scala.concurrent.Future
 
 trait TweetService {
+
+  implicit val ec =  scala.concurrent.ExecutionContext.Implicits.global
   val twitterClient: TwitterClient
 
-  def capitaliseTweets(params: RequestParams): Future[List[Tweet]] = {
+  def capitaliseTweets(params: RequestParams): Future[Seq[Tweet]] = {
       for {
         tweets <- TwitterClient.searchTweetsForUser(params.username)
         requestedTweets = tweets.take(params.limit.toInt)
-        capitalizedTweets <- capitalizeText(requestedTweets)
-      } yield capitalizedTweets
+        capitalisedTweets = capitaliseText(requestedTweets)
+      } yield capitalisedTweets
   }
 
-  private def capitalizeText(tweets: Seq[Tweet]): Seq[Tweet] = {
+  private def capitaliseText(tweets: Seq[Tweet]): Seq[Tweet] = {
     tweets.map { tweet =>
       tweet.copy(text = tweet.text.toUpperCase)
     }

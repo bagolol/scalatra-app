@@ -8,7 +8,7 @@ import com.typesafe.config.ConfigFactory
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-trait TwitterClient extends App {
+trait TwitterClient {
 
 
   //TODO move this into a config File
