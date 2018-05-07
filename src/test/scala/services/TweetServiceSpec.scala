@@ -1,5 +1,6 @@
 package com.letshout.services
 
+import com.letshout.dao.TwitterClient
 import org.scalatest.{BeforeAndAfter, FlatSpec}
 import org.scalatest.mockito.MockitoSugar
 import org.joda.time.format.ISODateTimeFormat
@@ -19,8 +20,10 @@ class TweetServiceSpec extends FlatSpec with MockitoSugar with BeforeAndAfter {
 
   protected implicit lazy val jsonFormats: Formats = DefaultFormats
 
+  private val mockTwitterClient = mock[TwitterClient]
 
   object TweetServiceTest extends TweetService {
+    override val twitterClient = mockTwitterClient
   }
 
   "capitaliseTweets" should "invoke the twitter client" in {

@@ -1,3 +1,5 @@
+package com.letshout.dao
+
 import com.danielasfregola.twitter4s.TwitterRestClient
 import com.danielasfregola.twitter4s.entities.{AccessToken, ConsumerToken, RatedData, Tweet}
 import com.danielasfregola.twitter4s.entities.enums.ResultType
@@ -6,7 +8,7 @@ import com.typesafe.config.ConfigFactory
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object TwitterClient extends App {
+trait TwitterClient extends App {
 
 
   //TODO move this into a config File
@@ -16,17 +18,17 @@ object TwitterClient extends App {
   private val accessKey = System.getenv("TWITTER_ACCESS_TOKEN")
   private val accessSecret = System.getenv("TWITTER_TOKEN_SECRET")
 
-  val consumerToken = ConsumerToken(consumerKey, consumerSecret)
-  val accessToken = AccessToken(accessKey, accessSecret)
+  private val consumerToken = ConsumerToken(consumerKey, consumerSecret)
+  private val accessToken = AccessToken(accessKey, accessSecret)
 
   val client = TwitterRestClient(consumerToken, accessToken)
 
-  def searchTweetsForUser(username: String, limit: String): Future[RatedData[Seq[Tweet]]] = {
-    client.userTimelineForUser(username)
+  def searchTweetsForUser(username: String): Future[Seq[Tweet]] = {
+    client.userTimelineForUser(username).map { ratedData =>
+      ratedData.data
+    }
   }
 
-  val result = searchTweets("#scalax").map { tweets =>
-    println(s"Downloaded ${tweets.size} tweets")
-    println(s"Tweets saved to file $filename")
-  }
 }
+
+object TwitterClient extends TwitterClient
