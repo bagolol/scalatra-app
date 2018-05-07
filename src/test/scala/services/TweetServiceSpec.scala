@@ -19,12 +19,11 @@ class TweetServiceSpec extends FlatSpec with MockitoSugar with TestUtil with Bef
   protected implicit lazy val jsonFormats: Formats = DefaultFormats
 
   private val mockTwitterClient = mock[TwitterClient]
-  println(mockTwitterClient)
-  println("=============================")
 
   object TweetServiceTest extends TweetService {
-    override val twitterClient: TwitterClient = mockTwitterClient
+    override val twitterClient = mockTwitterClient
   }
+
   before {
     reset(mockTwitterClient)
   }
@@ -32,7 +31,7 @@ class TweetServiceSpec extends FlatSpec with MockitoSugar with TestUtil with Bef
     val tweetResponse = fixtureAsJson("user_tweets_response.json").extract[Tweet]
     val params = new RequestParams("test", "10")
     when(mockTwitterClient.searchTweetsForUser("test")) thenReturn Future.successful(Seq(tweetResponse))
-    TweetServiceTest.capitaliseTweets(params)
+    Await.result(TweetServiceTest.capitaliseTweets(params), 5.seconds)
 
     verify(mockTwitterClient).searchTweetsForUser("test")
   }
@@ -47,6 +46,36 @@ class TweetServiceSpec extends FlatSpec with MockitoSugar with TestUtil with Bef
 
     verify(mockTwitterClient).searchTweetsForUser("test")
     result.length mustBe 1
+  }
+
+  it should "return an empty list if no tweets were found" in {
+    val params = new RequestParams("test", "1")
+    when(mockTwitterClient.searchTweetsForUser("test")) thenReturn Future.successful(Seq())
+
+    val result = Await.result(TweetServiceTest.capitaliseTweets(params), 5.seconds)
+
+    verify(mockTwitterClient).searchTweetsForUser("test")
+    result.length mustBe 0
+  }
+
+  it should "handle the exception when the user does not exist" in {
+    val params = new RequestParams("test", "1")
+    when(mockTwitterClient.searchTweetsForUser("test")) thenReturn Future.successful(Seq())
+
+    val result = Await.result(TweetServiceTest.capitaliseTweets(params), 5.seconds)
+
+    verify(mockTwitterClient).searchTweetsForUser("test")
+    result.length mustBe 0
+  }
+
+  it should "capitalise the text of the tweet" in {
+    val params = new RequestParams("test", "1")
+    when(mockTwitterClient.searchTweetsForUser("test")) thenReturn Future.successful(Seq())
+
+    val result = Await.result(TweetServiceTest.capitaliseTweets(params), 5.seconds)
+
+    verify(mockTwitterClient).searchTweetsForUser("test")
+    result.length mustBe 0
   }
 
 
