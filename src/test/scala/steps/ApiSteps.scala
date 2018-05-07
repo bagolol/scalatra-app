@@ -1,6 +1,8 @@
 package steps
 
 import java.util.concurrent.Executors
+
+import akka.actor.ActorSystem
 import com.letshout.api.Servlet
 import org.asynchttpclient.Response
 import dispatch._
@@ -51,9 +53,10 @@ object ApiTestServer {
   private val port = 8080
   private val server = new Server(port)
   private val context = new ServletContextHandler(server, "/", ServletContextHandler.SESSIONS)
+  val system = ActorSystem()
 
   val letShoutHost = host("localhost", port)
-  val servlet = new Servlet;
+  val servlet = new Servlet(system)
   val servletHolder = new ServletHolder(servlet)
   context.addServlet(servletHolder, "/*")
 

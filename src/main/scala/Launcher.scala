@@ -3,10 +3,9 @@ import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.servlet.DefaultServlet
 import org.eclipse.jetty.webapp.WebAppContext
 import org.scalatra.servlet.ScalatraListener
-import com.letshout.util.Logging
 
 
-object Launcher extends App with Logging {
+object Launcher extends App {
   implicit val system = ServiceActorSystem.actorSystem
   implicit val ec =  scala.concurrent.ExecutionContext.Implicits.global
 
