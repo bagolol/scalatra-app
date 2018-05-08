@@ -38,6 +38,7 @@ libraryDependencies ++= Seq(
 
 CucumberPlugin.glue := "steps"
 CucumberPlugin.monochrome := false
+CucumberPlugin.envProperties := Map("ENVIRONMENT" -> "TEST")
 
 enablePlugins(SbtTwirl)
 enablePlugins(ScalatraPlugin)
