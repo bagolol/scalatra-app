@@ -14,7 +14,7 @@ trait TweetService {
 
   def capitaliseTweets(params: RequestParams): Future[Seq[Tweet]] = {
       for {
-        tweets <- TwitterClient.searchTweetsForUser(params.username)
+        tweets <- twitterClient.searchTweetsForUser(params.username)
         requestedTweets = tweets.take(params.limit.toInt)
         capitalisedTweets = capitaliseText(requestedTweets)
       } yield capitalisedTweets
