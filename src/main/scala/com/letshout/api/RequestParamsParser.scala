@@ -29,7 +29,7 @@ object RequestParamsParser {
     match {
     case Success(limit) if limit > 10 => Failure(new InvalidRequestException(ERR_MSG_LIMIT_TOO_BIG))
     case Success(limit) if limit < 1 => Failure(new InvalidRequestException(ERR_MSG_LIMIT_NOT_POS))
-    case Success(limit) => Success(limit)
+    case Success(limit) => Success(limit.toInt)
   }
 
 

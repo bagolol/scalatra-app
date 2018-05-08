@@ -9,10 +9,12 @@ import scala.concurrent.Future
 
 trait TwitterClient {
 
-  def searchTweetsForUser(username: String): Future[Seq[Tweet]] = {
-    LetShoutTwitterRestClient.userTimelineForUser(username).map { ratedData =>
-      ratedData.data
-    } recoverWith {
+  def searchTweetsForUser(username: String, count: String): Future[Seq[Tweet]] = {
+    println("===========================")
+    LetShoutTwitterRestClient.userTimelineForUser(username, count = count.toInt)
+      .map { ratedData =>
+        ratedData.data
+      } recoverWith {
       case te: TwitterException =>
         Future.failed(new Exception("There was an error with the Twitter API", te))
       case t: Throwable =>
@@ -20,7 +22,5 @@ trait TwitterClient {
     }
   }
 }
-
-
 
 object TwitterClient extends TwitterClient

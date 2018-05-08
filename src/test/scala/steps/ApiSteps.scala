@@ -53,7 +53,6 @@ object ApiTestServer {
   private val port = 8080
   private val server = new Server(port)
   private val context = new ServletContextHandler(server, "/", ServletContextHandler.SESSIONS)
-//  val system = ActorSystem()
 
   val letShoutHost = host("localhost", port)
   val servlet = new Servlet()
@@ -65,6 +64,5 @@ object ApiTestServer {
   context.setResourceBase("src/main/webapp")
   context.addServlet(new ServletHolder("default", classOf[DefaultServlet]), "/")
   server.start()
-
 }
 

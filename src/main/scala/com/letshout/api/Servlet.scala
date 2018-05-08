@@ -1,6 +1,5 @@
 package com.letshout.api
 
-import akka.actor.ActorSystem
 import org.json4s.{DefaultFormats, Formats}
 import com.letshout.services.TweetService
 import org.json4s.JsonAST.{JObject, JString}
