@@ -1,15 +1,18 @@
 package com.letshout.services
 
 import com.danielasfregola.twitter4s.entities.Tweet
+import com.danielasfregola.twitter4s.exceptions.{Errors, TwitterError, TwitterException}
 import com.letshout.api.RequestParams
 import com.letshout.dao.TwitterClient
 import org.json4s.{DefaultFormats, Formats}
 import org.scalatest.MustMatchers._
 import org.json4s._
 import org.mockito.Mockito._
+import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{BeforeAndAfter, FlatSpec, MustMatchers}
 import util.TestUtil
+
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
 
@@ -23,17 +26,27 @@ class TweetServiceSpec extends FlatSpec with MockitoSugar with TestUtil with Bef
   object TweetServiceTest extends TweetService {
     override val twitterClient = mockTwitterClient
   }
+  val tweetResponse = fixtureAsJson("user_tweets_response.json").extract[Tweet]
 
   before {
     reset(mockTwitterClient)
   }
   "capitaliseTweets" should "invoke the twitter client" in {
-    val tweetResponse = fixtureAsJson("user_tweets_response.json").extract[Tweet]
     val params = new RequestParams("test", "10")
     when(mockTwitterClient.searchTweetsForUser("test")) thenReturn Future.successful(Seq(tweetResponse))
     Await.result(TweetServiceTest.capitaliseTweets(params), 5.seconds)
 
     verify(mockTwitterClient).searchTweetsForUser("test")
+  }
+
+  it should "capitalise the text of the tweet" in {
+    val params = new RequestParams("test", "1")
+    when(mockTwitterClient.searchTweetsForUser("test")) thenReturn Future.successful(Seq(tweetResponse))
+
+    val result = Await.result(TweetServiceTest.capitaliseTweets(params), 5.seconds)
+
+    verify(mockTwitterClient).searchTweetsForUser("test")
+    result.head.text mustBe "THIS IS A GREAT TWEET"
   }
 
   it should "return the requested amount of tweets" in {
@@ -58,25 +71,29 @@ class TweetServiceSpec extends FlatSpec with MockitoSugar with TestUtil with Bef
     result.length mustBe 0
   }
 
-  it should "handle the exception when the user does not exist" in {
+  it should "handle the exception when the TwitterClient throws a generic exception" in {
     val params = new RequestParams("test", "1")
-    when(mockTwitterClient.searchTweetsForUser("test")) thenReturn Future.successful(Seq())
+    when(mockTwitterClient.searchTweetsForUser("test")) thenReturn Future.failed(new Exception("Something went wrong"))
 
-    val result = Await.result(TweetServiceTest.capitaliseTweets(params), 5.seconds)
-
-    verify(mockTwitterClient).searchTweetsForUser("test")
-    result.length mustBe 0
+    ScalaFutures.whenReady(TweetServiceTest.capitaliseTweets(params).failed) { error =>
+      error mustBe a[Exception]
+      error.getMessage mustBe "Something went wrong"
+    }
   }
 
-  it should "capitalise the text of the tweet" in {
+  it should "handle the exception when the TwitterClient throws a TwitterException" in {
+    val apiError = new TwitterError("There was an error with the Twitter API", 404)
+    val twitterError = new Errors(apiError)
+    val twitterException = new TwitterException(404, twitterError)
     val params = new RequestParams("test", "1")
-    when(mockTwitterClient.searchTweetsForUser("test")) thenReturn Future.successful(Seq())
+    when(mockTwitterClient.searchTweetsForUser("test")) thenReturn Future.failed(twitterException)
 
-    val result = Await.result(TweetServiceTest.capitaliseTweets(params), 5.seconds)
-
-    verify(mockTwitterClient).searchTweetsForUser("test")
-    result.length mustBe 0
+    ScalaFutures.whenReady(TweetServiceTest.capitaliseTweets(params).failed) { error =>
+      error mustBe a[Exception]
+      error.getMessage mustBe "[404 Not Found] There was an error with the Twitter API (404)"
+    }
   }
+
 
 
 }
