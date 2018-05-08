@@ -13,9 +13,9 @@ import org.scalatra.json._
 import scala.concurrent.ExecutionContext
 
 
-class Servlet(system: ActorSystem) extends ScalatraServlet with JacksonJsonSupport with FutureSupport {
+class Servlet extends ScalatraServlet with JacksonJsonSupport with FutureSupport {
 
-  protected implicit def executor: ExecutionContext = system.dispatcher
+  protected implicit def executor: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
   protected implicit val jsonFormats: Formats = DefaultFormats
 
   before() {

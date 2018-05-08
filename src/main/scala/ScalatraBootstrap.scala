@@ -9,6 +9,6 @@ class ScalatraBootstrap extends LifeCycle {
   val system = ActorSystem()
 
   override def init(context: ServletContext) {
-    context.mount(new Servlet(system), "/*")
+    context.mount(new Servlet(), "/*")
   }
 }
