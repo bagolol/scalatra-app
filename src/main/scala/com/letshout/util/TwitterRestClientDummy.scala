@@ -21,7 +21,7 @@ object TwitterRestClientDummy extends TwitterRestClient(accessToken = accessToke
     screen_name match {
       case "nonExistent" => Future.failed(new Exception("The user doesn't exist"))
       case "userWithNoTweets" => {
-        val ratedData = new RatedData(rateLimit, Seq(tweet))
+        val ratedData = new RatedData(rateLimit, Seq[Tweet]())
         Future(ratedData)
       }
       case _ => {

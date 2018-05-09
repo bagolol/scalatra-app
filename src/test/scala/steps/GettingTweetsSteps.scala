@@ -26,7 +26,7 @@ class GettingTweetsSteps extends ScalaDsl with EN with Matchers with ApiSteps {
     (bodyAsJson(0) \ "text") mustBe JString("TEST TEXT")
     (bodyAsJson(1) \ "text") mustBe JString("TEST TEXT")
   }
-  Then("""^I should see a (\d+) response$""") { (code: Int) =>
+  Then("""^I should see a (\d+) response code$""") { (code: Int) =>
     statusCode mustBe code
   }
 }

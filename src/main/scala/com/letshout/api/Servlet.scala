@@ -37,13 +37,15 @@ class Servlet extends ScalatraServlet with JacksonJsonSupport with FutureSupport
       case Success(parsedParams) =>
         new AsyncResult {
           val is = TweetService.capitaliseTweets(parsedParams) map {
-            case tweets => Ok(write(tweets))
             case tweets if tweets.isEmpty => {
-              NotFound(buildErrorResponse(s"There are no tweets for user $params.username"))
+              NotFound(buildErrorResponse(s"There are no tweets for request ${params("username")}"))
             }
+            case tweets => Ok(write(tweets))
           }
         }
-      case Failure(e) => BadRequest(buildErrorResponse(s"{$e.getMessage}"))
+      case Failure(e) => {
+        BadRequest(buildErrorResponse(s"{$e.getMessage}"))
+      }
     }
   }
 
