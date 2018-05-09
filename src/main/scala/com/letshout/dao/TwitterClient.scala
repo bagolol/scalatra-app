@@ -17,7 +17,7 @@ trait TwitterClient {
       case te: TwitterException =>
         Future.failed(new Exception("There was an error with the Twitter API", te))
       case t: Throwable =>
-        Future.failed(new Exception("Something went wrong", t))
+        Future.failed(new Exception(t.getMessage, t))
     }
   }
 }

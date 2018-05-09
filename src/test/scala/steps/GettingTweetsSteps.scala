@@ -12,8 +12,8 @@ class GettingTweetsSteps extends ScalaDsl with EN with Matchers with ApiSteps {
     mockServer.resetRequests()
   }
 
-  Given("""^a request for 2 tweets from user xyz arrives$""") { () =>
-    get(ApiTestServer.letShoutHost / "tweets" / "xyz" / "2")
+  Given("""^a request for (\d+) tweets from user "([^"]*)" arrives$""") { (count: Int, user: String) =>
+    get(ApiTestServer.letShoutHost / "tweets" / user / "2")
   }
   Then("""^I should receive a success response$""") { () =>
     statusCode mustBe 200
@@ -26,4 +26,8 @@ class GettingTweetsSteps extends ScalaDsl with EN with Matchers with ApiSteps {
     (bodyAsJson(0) \ "text") mustBe JString("TEST TEXT")
     (bodyAsJson(1) \ "text") mustBe JString("TEST TEXT")
   }
+  Then("""^I should see a (\d+) response$""") { (code: Int) =>
+    statusCode mustBe code
+  }
 }
+
