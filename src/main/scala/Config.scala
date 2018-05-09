@@ -3,7 +3,6 @@ package com.letshout
 import com.danielasfregola.twitter4s.TwitterRestClient
 import com.letshout.util.TwitterRestClientDummy
 import com.danielasfregola.twitter4s.entities.{AccessToken, ConsumerToken}
-import org.json4s.JsonAST.JString
 
 object Config {
   private val DEV = "dev"

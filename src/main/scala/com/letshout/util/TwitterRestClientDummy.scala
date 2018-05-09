@@ -18,13 +18,21 @@ object TwitterRestClientDummy extends TwitterRestClient(accessToken = accessToke
   private val tweet = Tweet(created_at = new Date(), id = 12345678910L, id_str = "test", source = "test", text = "Test Text")
 
   override def userTimelineForUser(screen_name: String, since_id: Option[Long], count: Int, max_id: Option[Long], trim_user: Boolean, exclude_replies: Boolean, contributor_details: Boolean, include_rts: Boolean, tweet_mode: TweetMode): Future[RatedData[Seq[Tweet]]] = {
-    val ratedData = new RatedData(rateLimit, multiplyTweets(count, tweet))
-    Future(ratedData)
+    screen_name match {
+      case "nonExistent" => Future.failed(new Exception("The user doesn't exist"))
+      case "userWithNoTweets" => {
+        val ratedData = new RatedData(rateLimit, Seq(tweet))
+        Future(ratedData)
+      }
+      case _ => {
+        val ratedData = new RatedData(rateLimit, multiplyTweets(count, tweet))
+        Future(ratedData)
+      }
+    }
   }
 
   private def multiplyTweets(count: Int, tweet: Tweet): Seq[Tweet] = {
     List.fill(count)(tweet)
   }
-
 
 }

@@ -10,7 +10,6 @@ import scala.concurrent.Future
 trait TwitterClient {
 
   def searchTweetsForUser(username: String, count: String): Future[Seq[Tweet]] = {
-    println("===========================")
     LetShoutTwitterRestClient.userTimelineForUser(username, count = count.toInt)
       .map { ratedData =>
         ratedData.data

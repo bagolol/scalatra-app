@@ -1,5 +1,6 @@
 package com.letshout.api
 
+import com.danielasfregola.twitter4s.entities.Tweet
 import org.json4s.{DefaultFormats, Formats}
 import com.letshout.services.TweetService
 import org.json4s.JsonAST.{JObject, JString}
@@ -35,8 +36,11 @@ class Servlet extends ScalatraServlet with JacksonJsonSupport with FutureSupport
     RequestParamsParser(params) match {
       case Success(parsedParams) =>
         new AsyncResult {
-          val is = TweetService.capitaliseTweets(parsedParams) map { tweets =>
-            Ok(write(tweets))
+          val is = TweetService.capitaliseTweets(parsedParams) map {
+            case tweets => Ok(write(tweets))
+            case tweets if tweets.isEmpty => {
+              NotFound(buildErrorResponse(s"There are no tweets for user $params.username"))
+            }
           }
         }
       case Failure(e) => BadRequest(buildErrorResponse(s"{$e.getMessage}"))
