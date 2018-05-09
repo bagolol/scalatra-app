@@ -2,6 +2,14 @@
 
 ## Run ##
 
+Add these env variables
+```sh
+export TWITTER_CONSUMER_KEY=yourKey
+export TWITTER_CONSUMER_SECRET=yourSecret
+export TWITTER_ACCESS_TOKEN=yourTwitterAccessToken
+export TWITTER_TOKEN_SECRET=yourTwitterTokenSecret
+```
+Start the server
 ```sh
 $ sbt
 > jetty:start
