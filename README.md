@@ -8,7 +8,7 @@ $ sbt
 ```
 Open [http://localhost:8080/](http://localhost:8080/) in your browser
 
-To look for tweets for a specific username open: http://localhost:8080/tweets/<username>/<limit>
+To look for tweets for a specific username open: `http://localhost:8080/tweets/<username>/<limit>`
 
 ## Unit tests ##
 
