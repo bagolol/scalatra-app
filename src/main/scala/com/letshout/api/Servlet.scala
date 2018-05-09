@@ -41,6 +41,8 @@ class Servlet extends ScalatraServlet with JacksonJsonSupport with FutureSupport
               NotFound(buildErrorResponse(s"There are no tweets for request ${params("username")}"))
             }
             case tweets => Ok(write(tweets))
+          } recover {
+            case e => NotFound("")
           }
         }
       case Failure(e) => {
