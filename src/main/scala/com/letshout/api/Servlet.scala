@@ -41,7 +41,7 @@ class Servlet extends ScalatraServlet with JacksonJsonSupport with FutureSupport
             }
             case tweets => Ok(write(tweets))
           } recover {
-            case e => BadRequest(e)
+            case e => BadRequest(buildErrorResponse(e.getMessage))
           }
         }
       case Failure(e) => {
