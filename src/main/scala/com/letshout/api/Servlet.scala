@@ -1,6 +1,5 @@
 package com.letshout.api
 
-import com.danielasfregola.twitter4s.entities.Tweet
 import org.json4s.{DefaultFormats, Formats}
 import com.letshout.services.TweetService
 import org.json4s.JsonAST.{JObject, JString}
@@ -42,7 +41,7 @@ class Servlet extends ScalatraServlet with JacksonJsonSupport with FutureSupport
             }
             case tweets => Ok(write(tweets))
           } recover {
-            case e => NotFound("")
+            case e => BadRequest(e)
           }
         }
       case Failure(e) => {

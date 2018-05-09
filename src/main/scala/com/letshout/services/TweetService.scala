@@ -12,13 +12,10 @@ trait TweetService {
   val twitterClient: TwitterClient
 
   def capitaliseTweets(params: RequestParams): Future[Seq[Tweet]] = {
-    (for {
+    for {
       tweets <- twitterClient.searchTweetsForUser(params.username, params.limit)
       capitalisedTweets = capitaliseText(tweets)
-    } yield capitalisedTweets) recoverWith {
-      case t: Throwable =>
-        Future.failed(new Exception(t.getMessage))
-    }
+    } yield capitalisedTweets
   }
 
   private def capitaliseText(tweets: Seq[Tweet]): Seq[Tweet] = {

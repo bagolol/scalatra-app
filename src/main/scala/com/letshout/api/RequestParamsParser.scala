@@ -6,7 +6,7 @@ import scala.util.{Failure, Success, Try}
 
 
 object RequestParamsParser {
-// TODO no bad path for int conversion
+
   private val ERR_MSG_LIMIT_TOO_BIG = "Invalid limit parameter: max number of tweets is 10"
   private val ERR_MSG_LIMIT_INV = "Invalid limit parameter: not an integer"
   private val ERR_MSG_LIMIT_NOT_POS = "Invalid limit parameter: min number of tweets is 1"
@@ -29,6 +29,7 @@ object RequestParamsParser {
     match {
     case Success(limit) if limit > 10 => Failure(new InvalidRequestException(ERR_MSG_LIMIT_TOO_BIG))
     case Success(limit) if limit < 1 => Failure(new InvalidRequestException(ERR_MSG_LIMIT_NOT_POS))
+    case Success(limit) => Success(limit)
     case Failure(e) => Failure(new InvalidRequestException(ERR_MSG_LIMIT_INV))
   }
 

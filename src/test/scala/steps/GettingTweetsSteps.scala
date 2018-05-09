@@ -15,11 +15,20 @@ class GettingTweetsSteps extends ScalaDsl with EN with Matchers with ApiSteps {
   Given("""^a request for (\d+) tweets from user "([^"]*)" arrives$""") { (count: Int, user: String) =>
     get(ApiTestServer.letShoutHost / "tweets" / user / "2")
   }
+
+  Given("""^a request for an invalid number of tweet arrives$"""){ () =>
+    get(ApiTestServer.letShoutHost / "tweets" / "xyz" / "invalid")
+  }
+
   Then("""^I should receive a success response$""") { () =>
     statusCode mustBe 200
   }
-  And("""^the response contains 2 tweets$""") { () =>
-    bodyAsJson.asInstanceOf[JArray].values.size mustBe 2
+  And("""^the response contains (\d+) tweets$""") { (count: Int) =>
+    bodyAsJson.asInstanceOf[JArray].values.size mustBe count
+  }
+
+  And("""^the response contains no tweets$""") { () =>
+    bodyAsJson \ "error" mustBe JString("There are no tweets for request userWithNoTweets")
   }
 
   And("""^the text is uppercase$""") { () =>
